@@ -1,4 +1,4 @@
-package tasks.data_structures.linked_list;
+package tasks.data_structures;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
