@@ -1,6 +1,7 @@
 package tasks.algorithms;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 public class Sortings {
     private static void swap(int[] array, int index1, int index2) {
@@ -9,21 +10,34 @@ public class Sortings {
         array[index2] = temp;
     }
 
-    static int[] selectionSort(int[] numbers) {
+    public static int[] bubbleSort(int[] array) {
+        int[] arrayToSort = array.clone();
+        for (int currentElement = 0; currentElement < arrayToSort.length; currentElement++) {
+            for (int i = 0; i < arrayToSort.length - currentElement - 1; i++) {
+                if(arrayToSort[i] > arrayToSort[i + 1]) {
+                    swap(arrayToSort, i, i+1);
+                }
+            }
+        }
+        return arrayToSort;
+    }
+
+    public static int[] selectionSort(int[] array) {
+        int[] arrayToSort = array.clone();
         int currentPutIndex = 0;
-        for (int i = 0; i < numbers.length; i++) {
+        for (int i = 0; i < arrayToSort.length; i++) {
             int minIndex = i;
-            for (int j = minIndex; j < numbers.length; j++) {
-                if (numbers[j] < numbers[minIndex]) {
+            for (int j = minIndex; j < arrayToSort.length; j++) {
+                if (arrayToSort[j] < arrayToSort[minIndex]) {
                     minIndex = j;
                 }
             }
-            swap(numbers, currentPutIndex++, minIndex);
+            swap(arrayToSort, currentPutIndex++, minIndex);
         }
-        return numbers;
+        return arrayToSort;
     }
 
-    static int[] merge(int[] sortedArray1, int[] sortedArray2) {
+    private static int[] merge(int[] sortedArray1, int[] sortedArray2) {
         int[] merged = new int[sortedArray1.length + sortedArray2.length];
         int index1 = 0;
         int index2 = 0;
@@ -41,36 +55,68 @@ public class Sortings {
         return merged;
     }
 
-    static int[] mergeSort(int[] arr) {
+    public static int[] mergeSort(int[] array) {
         int start = 0;
-        int end = arr.length - 1;
+        int end = array.length - 1;
         if (end > start) {
             int middle = (start + end) / 2;
-            int[] firstHalf = mergeSort(Arrays.copyOfRange(arr, start, middle + 1));
-            int[] secondHalf = mergeSort(Arrays.copyOfRange(arr, middle + 1, end + 1));
+            int[] firstHalf = mergeSort(Arrays.copyOfRange(array, start, middle + 1));
+            int[] secondHalf = mergeSort(Arrays.copyOfRange(array, middle + 1, end + 1));
             return merge(firstHalf, secondHalf);
         } else {
-            return arr;
+            return array;
         }
     }
 
+    public static int[] insertionSort(int[] array) {
+        int[] sortedArray = array.clone();
+        for (int currentNumberIndex = 1; currentNumberIndex < sortedArray.length; currentNumberIndex++) {
+            int smallerNumberIndex = currentNumberIndex - 1;
+            while (smallerNumberIndex >= 0 && sortedArray[smallerNumberIndex] > sortedArray[smallerNumberIndex + 1]) {
+                swap(sortedArray, smallerNumberIndex, smallerNumberIndex + 1);
+                smallerNumberIndex--;
+            }
+        }
+        return sortedArray;
+    }
 
-    static int binarySearch(int[] arr, int searched) {
-        int midIndex = arr.length / 2;
-        System.out.printf("Searching %s with middle index - %d%n", Arrays.toString(arr), midIndex);
-        if (arr[midIndex] == searched) {
-            System.out.printf("Found the number in %s at position %d%n", Arrays.toString(arr), midIndex);
+    private static int partition(int[] array, int start, int end) {
+        int pivotIndex = start;
+        int pivot = array[end];
+        for (int i = start; i <= end-1; i++) {
+            if (array[i] < pivot) {
+                swap(array, i, pivotIndex++);
+            }
+        }
+        swap(array, end, pivotIndex);
+        return pivotIndex;
+    }
+
+    public static int[] quickSort(int[] array, int start, int end) {
+        if (end > start) {
+            int pivot = partition(array, start, end);
+            quickSort(array, start, pivot - 1);
+            quickSort(array, pivot + 1, end);
+        }
+        return array;
+    }
+
+    public static int binarySearch(int[] array, int searched) {
+        int midIndex = array.length / 2;
+        System.out.printf("Searching %s with middle index - %d%n", Arrays.toString(array), midIndex);
+        if (array[midIndex] == searched) {
+            System.out.printf("Found the number in %s at position %d%n", Arrays.toString(array), midIndex);
             return midIndex;
-        } else if (arr[midIndex] > searched) {
+        } else if (array[midIndex] > searched) {
             System.out.printf("Searched number is not at the middle index %d%n", midIndex);
-            System.out.printf("Searching in left half [%d; %d] of %s%n", 0, midIndex, Arrays.toString(arr));
-            return binarySearch(Arrays.copyOfRange(arr, 0, midIndex), searched);
+            System.out.printf("Searching in left half [%d; %d] of %s%n", 0, midIndex, Arrays.toString(array));
+            return binarySearch(Arrays.copyOfRange(array, 0, midIndex), searched);
         }
         System.out.printf("Searched number is not at the middle index %d%n", midIndex);
-        System.out.printf("Searching in left right [%d; %d] of %s%n", midIndex, arr.length - 1, Arrays.toString(arr));
-        int positionInRightHalf = binarySearch(Arrays.copyOfRange(arr, midIndex, arr.length), searched);
+        System.out.printf("Searching in left right [%d; %d] of %s%n", midIndex, array.length - 1, Arrays.toString(array));
+        int positionInRightHalf = binarySearch(Arrays.copyOfRange(array, midIndex, array.length), searched);
         if (positionInRightHalf > -1) {
-            System.out.printf("Found in right half [%d; %d] of %s%n", midIndex, arr.length - 1, Arrays.toString(arr));
+            System.out.printf("Found in right half [%d; %d] of %s%n", midIndex, array.length - 1, Arrays.toString(array));
             System.out.printf("Returning index in actual array - %d%n", positionInRightHalf + midIndex + 1);
             return positionInRightHalf + midIndex + 1;
         }
@@ -78,12 +124,16 @@ public class Sortings {
     }
 
     public static void main(String[] args) {
-        int[] sortedArray = {3, 4, 4, 5, 6, 23, 42, 65, 123, 231, 234, 235, 423, 543, 1234, 5667, 78978};
-//        int[] unsortedArray = {3, 5, 1234, 543, 123, 235, 23, 42, 423, 4, 4, 234, 231, 6, 5667, 78978, 65};
+//        int[] sortedArray = {3, 4, 4, 5, 6, 23, 42, 65, 123, 231, 234, 235, 423, 543, 1234, 5667, 78978};
+        int[] unsortedArray = {3, 5, 1234, 543, 123, 235, 23, 42, 423, 4, 4, 234, 231, 6, 5667, 78978, 65};
 //        int[] sortedArray2 = selectionSort(new int[]{3, 5, 1234, 543, 123, 235, 23, 42});
 //        int[] sortedArray3 = selectionSort(new int[]{423, 4, 4, 234, 231, 6, 5667, 78978, 65});
 //        LinkedList<Integer> linkedList1 = new LinkedList<>(Arrays.stream(sortedArray2).boxed().toList());
 //        LinkedList<Integer> linkedList2 = new LinkedList<>(Arrays.stream(sortedArray3).boxed().toList());
-        System.out.println(binarySearch(sortedArray, 1234));
+//        partition(unsortedArray, 0, unsortedArray.length - 1);
+        quickSort(unsortedArray, 0, unsortedArray.length - 1);
+        for (int num : unsortedArray) {
+            System.out.print(num    + " ");
+        }
     }
 }
