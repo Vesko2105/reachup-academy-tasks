@@ -1,7 +1,6 @@
-package tasks.data_structures.linked_list;
+package tasks.data_structures;
 
 import org.junit.jupiter.api.*;
-import tasks.data_structures.linked_list.DoubleLinkedList;
 
 import java.util.NoSuchElementException;
 
