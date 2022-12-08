@@ -4,6 +4,8 @@ import org.junit.jupiter.api.*;
 
 import java.util.NoSuchElementException;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 class DoubleLinkedListTest {
 
     @Test
@@ -11,18 +13,18 @@ class DoubleLinkedListTest {
     void size() {
         DoubleLinkedList<Integer> list = new DoubleLinkedList<>();
         int expectedSize = 0;
-        Assertions.assertEquals(expectedSize, list.size());
+        assertEquals(expectedSize, list.size());
         list = testList();
         expectedSize = 10;
-        Assertions.assertEquals(expectedSize, list.size());
+        assertEquals(expectedSize, list.size());
         for (int i = 0; i < 3; i++) {
             list.add(null);
         }
         expectedSize = 13;
-        Assertions.assertEquals(expectedSize, list.size());
+        assertEquals(expectedSize, list.size());
         list.clear();
         expectedSize = 0;
-        Assertions.assertEquals(expectedSize, list.size());
+        assertEquals(expectedSize, list.size());
     }
 
     @Test
@@ -32,8 +34,8 @@ class DoubleLinkedListTest {
         list.clear();
         int expectedSize = 0;
         String expectedList = "[]";
-        Assertions.assertEquals(expectedSize, list.size());
-        Assertions.assertEquals(expectedList, list.toString());
+        assertEquals(expectedSize, list.size());
+        assertEquals(expectedList, list.toString());
     }
 
     @Test
@@ -41,13 +43,13 @@ class DoubleLinkedListTest {
     void listToString() {
         DoubleLinkedList<Integer> list = DoubleLinkedList.of(212, null, 42, 1, 6, null, 592391, 475, 91, null, 12479, 9173, 1, 5, 723, 47913);
         String expectedList = "[212, null, 42, 1, 6, null, 592391, 475, 91, null, 12479, 9173, 1, 5, 723, 47913]";
-        Assertions.assertEquals(expectedList, list.toString());
+        assertEquals(expectedList, list.toString());
         list.clear();
         expectedList = "[]";
-        Assertions.assertEquals(expectedList, list.toString());
+        assertEquals(expectedList, list.toString());
         list.add(null);
         expectedList = "[null]";
-        Assertions.assertEquals(expectedList, list.toString());
+        assertEquals(expectedList, list.toString());
     }
 
     @Nested
@@ -65,16 +67,16 @@ class DoubleLinkedListTest {
             Integer expectedFirstElement = 1;
             Integer expectedLastElement = 10;
             String expectedList = "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]";
-            Assertions.assertEquals(expectedSize, list.size());
-            Assertions.assertEquals(expectedFirstElement, list.get(0));
-            Assertions.assertEquals(expectedLastElement, list.get(list.size() - 1));
-            Assertions.assertEquals(expectedList, list.toString());
+            assertEquals(expectedSize, list.size());
+            assertEquals(expectedFirstElement, list.get(0));
+            assertEquals(expectedLastElement, list.get(list.size() - 1));
+            assertEquals(expectedList, list.toString());
             list.add(null);
             expectedSize = 11;
             expectedList = "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, null]";
-            Assertions.assertEquals(expectedSize, list.size());
-            Assertions.assertNull(list.get(list.size() - 1));
-            Assertions.assertEquals(expectedList, list.toString());
+            assertEquals(expectedSize, list.size());
+            assertNull(list.get(list.size() - 1));
+            assertEquals(expectedList, list.toString());
         }
 
         @Test
@@ -84,10 +86,10 @@ class DoubleLinkedListTest {
             int expectedSize = 11;
             Integer expectedFirstElement = 1;
             String expectedList = "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, null]";
-            Assertions.assertEquals(expectedSize, list.size());
-            Assertions.assertEquals(expectedFirstElement, list.get(0));
-            Assertions.assertNull(list.get(list.size() - 1));
-            Assertions.assertEquals(expectedList, list.toString());
+            assertEquals(expectedSize, list.size());
+            assertEquals(expectedFirstElement, list.get(0));
+            assertNull(list.get(list.size() - 1));
+            assertEquals(expectedList, list.toString());
         }
 
         @Test
@@ -98,15 +100,15 @@ class DoubleLinkedListTest {
             int expectedSize = 11;
             Integer expectedFirstElement = 256;
             String expectedList = "[256, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]";
-            Assertions.assertEquals(expectedSize, list.size());
-            Assertions.assertEquals(expectedFirstElement, list.get(0));
-            Assertions.assertEquals(expectedList, list.toString());
+            assertEquals(expectedSize, list.size());
+            assertEquals(expectedFirstElement, list.get(0));
+            assertEquals(expectedList, list.toString());
             list.addFirst(null);
             expectedSize = 12;
             expectedList = "[null, 256, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]";
-            Assertions.assertEquals(expectedSize, list.size());
-            Assertions.assertNull(list.get(0));
-            Assertions.assertEquals(expectedList, list.toString());
+            assertEquals(expectedSize, list.size());
+            assertNull(list.get(0));
+            assertEquals(expectedList, list.toString());
         }
 
         @Test
@@ -117,15 +119,15 @@ class DoubleLinkedListTest {
             int expectedSize = 11;
             Integer expectedLastElement = 256;
             String expectedList = "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 256]";
-            Assertions.assertEquals(expectedSize, list.size());
-            Assertions.assertEquals(expectedLastElement, list.get(list.size() - 1));
-            Assertions.assertEquals(expectedList, list.toString());
+            assertEquals(expectedSize, list.size());
+            assertEquals(expectedLastElement, list.get(list.size() - 1));
+            assertEquals(expectedList, list.toString());
             list.addLast(null);
             expectedSize = 12;
             expectedList = "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 256, null]";
-            Assertions.assertEquals(expectedSize, list.size());
-            Assertions.assertNull(list.get(list.size() - 1));
-            Assertions.assertEquals(expectedList, list.toString());
+            assertEquals(expectedSize, list.size());
+            assertNull(list.get(list.size() - 1));
+            assertEquals(expectedList, list.toString());
         }
 
         @Test
@@ -138,20 +140,20 @@ class DoubleLinkedListTest {
             Integer expectedLastElement = 10;
             Integer expectedElementAtIndex = 111;
             String expectedList = "[1, 2, 3, 4, 111, 5, 6, 7, 8, 9, 10]";
-            Assertions.assertEquals(expectedSize, list.size());
-            Assertions.assertEquals(expectedFirstElement, list.get(0));
-            Assertions.assertEquals(expectedLastElement, list.get(list.size() - 1));
-            Assertions.assertEquals(expectedElementAtIndex, list.get(4));
-            Assertions.assertEquals(expectedList, list.toString());
+            assertEquals(expectedSize, list.size());
+            assertEquals(expectedFirstElement, list.get(0));
+            assertEquals(expectedLastElement, list.get(list.size() - 1));
+            assertEquals(expectedElementAtIndex, list.get(4));
+            assertEquals(expectedList, list.toString());
             list.add(7, null);
             expectedSize = 12;
             expectedList = "[1, 2, 3, 4, 111, 5, 6, null, 7, 8, 9, 10]";
-            Assertions.assertEquals(expectedSize, list.size());
-            Assertions.assertNull(list.get(7));
-            Assertions.assertEquals(expectedList, list.toString());
+            assertEquals(expectedSize, list.size());
+            assertNull(list.get(7));
+            assertEquals(expectedList, list.toString());
             Class<IndexOutOfBoundsException> expectedExceptionClass = IndexOutOfBoundsException.class;
-            Assertions.assertThrows(expectedExceptionClass, () -> list.add(-10, 100));
-            Assertions.assertThrows(expectedExceptionClass, () -> list.add(13, 100));
+            assertThrows(expectedExceptionClass, () -> list.add(-10, 100));
+            assertThrows(expectedExceptionClass, () -> list.add(13, 100));
         }
     }
 
@@ -170,10 +172,10 @@ class DoubleLinkedListTest {
             int expectedSize = 0;
             int expectedRemovedElementsCount = 10;
             String expectedRemovedElements = "[10, 9, 8, 7, 6, 5, 4, 3, 2, 1]";
-            Assertions.assertEquals(expectedSize, list.size());
-            Assertions.assertEquals(expectedRemovedElementsCount, removedElements.size());
-            Assertions.assertEquals(expectedRemovedElements, removedElements.toString());
-            Assertions.assertThrows(NoSuchElementException.class, list::remove);
+            assertEquals(expectedSize, list.size());
+            assertEquals(expectedRemovedElementsCount, removedElements.size());
+            assertEquals(expectedRemovedElements, removedElements.toString());
+            assertThrows(NoSuchElementException.class, list::remove);
         }
 
         @Test
@@ -184,11 +186,11 @@ class DoubleLinkedListTest {
             Integer expectedRemovedElement = 1;
             int expectedSize = 9;
             String expectedList = "[2, 3, 4, 5, 6, 7, 8, 9, 10]";
-            Assertions.assertEquals(expectedRemovedElement, removedElement);
-            Assertions.assertEquals(expectedSize, list.size());
-            Assertions.assertEquals(expectedList, list.toString());
+            assertEquals(expectedRemovedElement, removedElement);
+            assertEquals(expectedSize, list.size());
+            assertEquals(expectedList, list.toString());
             list = new DoubleLinkedList<>();
-            Assertions.assertThrows(NoSuchElementException.class, list::removeFirst);
+            assertThrows(NoSuchElementException.class, list::removeFirst);
         }
 
         @Test
@@ -199,11 +201,11 @@ class DoubleLinkedListTest {
             Integer expectedRemovedElement = 10;
             int expectedSize = 9;
             String expectedList = "[1, 2, 3, 4, 5, 6, 7, 8, 9]";
-            Assertions.assertEquals(expectedRemovedElement, removedElement);
-            Assertions.assertEquals(expectedSize, list.size());
-            Assertions.assertEquals(expectedList, list.toString());
+            assertEquals(expectedRemovedElement, removedElement);
+            assertEquals(expectedSize, list.size());
+            assertEquals(expectedList, list.toString());
             list = new DoubleLinkedList<>();
-            Assertions.assertThrows(NoSuchElementException.class, list::removeLast);
+            assertThrows(NoSuchElementException.class, list::removeLast);
         }
 
         @Test
@@ -214,12 +216,12 @@ class DoubleLinkedListTest {
             Integer expectedRemovedElement = 4;
             int expectedSize = 9;
             String expectedList = "[1, 2, 3, 5, 6, 7, 8, 9, 10]";
-            Assertions.assertEquals(expectedRemovedElement, removedElement);
-            Assertions.assertEquals(expectedSize, list.size());
-            Assertions.assertEquals(expectedList, list.toString());
-            Assertions.assertThrows(IndexOutOfBoundsException.class, () -> list.remove(10));
-            Assertions.assertThrows(IndexOutOfBoundsException.class, () -> list.remove(100));
-            Assertions.assertThrows(IndexOutOfBoundsException.class, () -> list.remove(-1));
+            assertEquals(expectedRemovedElement, removedElement);
+            assertEquals(expectedSize, list.size());
+            assertEquals(expectedList, list.toString());
+            assertThrows(IndexOutOfBoundsException.class, () -> list.remove(10));
+            assertThrows(IndexOutOfBoundsException.class, () -> list.remove(100));
+            assertThrows(IndexOutOfBoundsException.class, () -> list.remove(-1));
         }
 
         @Test
@@ -232,22 +234,22 @@ class DoubleLinkedListTest {
             Integer expectedRemovedElementIndex = 2;
             int expectedSize = 10;
             String expectedList = "[1, 2, 4, 5, 6, 7, 8, null, 9, 10]";
-            Assertions.assertEquals(expectedRemovedElementIndex, removedElementIndex);
-            Assertions.assertEquals(expectedSize, list.size());
-            Assertions.assertEquals(expectedList, list.toString());
+            assertEquals(expectedRemovedElementIndex, removedElementIndex);
+            assertEquals(expectedSize, list.size());
+            assertEquals(expectedList, list.toString());
 
             removedElementIndex = list.remove(null);
             expectedRemovedElementIndex = 7;
             expectedSize = 9;
             expectedList = "[1, 2, 4, 5, 6, 7, 8, 9, 10]";
-            Assertions.assertEquals(expectedRemovedElementIndex, removedElementIndex);
-            Assertions.assertEquals(expectedSize, list.size());
-            Assertions.assertEquals(expectedList, list.toString());
+            assertEquals(expectedRemovedElementIndex, removedElementIndex);
+            assertEquals(expectedSize, list.size());
+            assertEquals(expectedList, list.toString());
 
             expectedRemovedElementIndex = -1;
-            Assertions.assertEquals(expectedRemovedElementIndex, list.remove(Integer.valueOf(100)));
-            Assertions.assertEquals(expectedRemovedElementIndex, list.remove(Integer.valueOf(-1)));
-            Assertions.assertEquals(expectedRemovedElementIndex, list.remove(null));
+            assertEquals(expectedRemovedElementIndex, list.remove(Integer.valueOf(100)));
+            assertEquals(expectedRemovedElementIndex, list.remove(Integer.valueOf(-1)));
+            assertEquals(expectedRemovedElementIndex, list.remove(null));
         }
     }
 
@@ -261,7 +263,7 @@ class DoubleLinkedListTest {
             Integer[] elements = {4, 10, null, 11111, 1};
             int[] expectedElementIndexes = {3, 9, -1, -1, 0};
             for (int i = 0; i < elements.length; i++) {
-                Assertions.assertEquals(expectedElementIndexes[i], list.findFirst(elements[i]));
+                assertEquals(expectedElementIndexes[i], list.findFirst(elements[i]));
             }
         }
 
@@ -273,10 +275,10 @@ class DoubleLinkedListTest {
             int[] elementIndexes = {3, 9, 0, 1, 4};
             Integer[] expectedElements = {3, 9, null, 1, 4};
             for (int i = 0; i < elementIndexes.length; i++) {
-                Assertions.assertEquals(expectedElements[i], list.get(elementIndexes[i]));
+                assertEquals(expectedElements[i], list.get(elementIndexes[i]));
             }
-            Assertions.assertThrows(IndexOutOfBoundsException.class, () -> list.get(-1));
-            Assertions.assertThrows(IndexOutOfBoundsException.class, () -> list.get(11));
+            assertThrows(IndexOutOfBoundsException.class, () -> list.get(-1));
+            assertThrows(IndexOutOfBoundsException.class, () -> list.get(11));
         }
     }
     private DoubleLinkedList<Integer> testList() {

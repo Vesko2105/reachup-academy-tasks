@@ -118,7 +118,21 @@ public class DoubleLinkedList<E> implements Iterable<E> {
             newList.add(element);
         }
         return newList;
-    } 
+    }
+
+    public DoubleLinkedList<E> subList(int index, int size) {
+        if (index + size >= this.size) {
+            throw new IndexOutOfBoundsException();
+        }
+        DoubleLinkedList<E> subList = new DoubleLinkedList<>();
+        Iterator<Node<E>> iterator = nodeIterator(index);
+        int currentIndex = index;
+        while (iterator.hasNext() && currentIndex < index + size) {
+            subList.add(iterator.next().element);
+            currentIndex++;
+        }
+        return subList;
+    }
 
     @Override
     public Iterator<E> iterator() {
@@ -132,6 +146,9 @@ public class DoubleLinkedList<E> implements Iterable<E> {
     private NodeIterator nodeIterator() {
         return new NodeIterator(firstNodePointer);
     } 
+    private NodeIterator nodeIterator(int index) {
+        return new NodeIterator(getNode(index));
+    }
 
     private Node<E> getNode(int index) {
         if (size < 1) {
@@ -172,7 +189,8 @@ public class DoubleLinkedList<E> implements Iterable<E> {
             }
             return -1;
         }
-    } 
+    }
+
     private int findLastNode(Node<E> searched) {
         if (size < 1) {
             throw new NoSuchElementException();
@@ -234,22 +252,21 @@ public class DoubleLinkedList<E> implements Iterable<E> {
     public void add(int index, E element) {
         if (index == 0) {
             addFirst(element);
-            size++;
         } else if (index == size) {
             addLast(element);
-            size++;
+        } else {
+            Node<E> currentNodeAtIndex = getNode(index);
+
+            if (currentNodeAtIndex != null) {
+                Node<E> newNode = new Node<>(element);
+                newNode.next = currentNodeAtIndex;
+                newNode.previous = currentNodeAtIndex.previous;
+                currentNodeAtIndex.previous.next = newNode;
+                currentNodeAtIndex.previous = newNode;
+                size++;
+            }
         }
 
-        Node<E> currentNodeAtIndex = getNode(index);
-
-        if (currentNodeAtIndex != null) {
-            Node<E> newNode = new Node<>(element);
-            newNode.next = currentNodeAtIndex;
-            newNode.previous = currentNodeAtIndex.previous;
-            currentNodeAtIndex.previous.next = newNode;
-            currentNodeAtIndex.previous = newNode;
-            size++;
-        }
     }
 
     public int remove(E element) {
