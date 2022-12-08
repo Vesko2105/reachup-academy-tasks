@@ -1,7 +1,7 @@
 package tasks.data_structures;
 
 public class Queue<E> {
-    private DoubleLinkedList<E> list;
+    protected DoubleLinkedList<E> list;
 
     public Queue() {
         this.list = new DoubleLinkedList<>();
@@ -25,5 +25,9 @@ public class Queue<E> {
 
     public int find(E element) {
         return list.findLast(element);
+    }
+
+    public int size() {
+        return list.size();
     }
  }
