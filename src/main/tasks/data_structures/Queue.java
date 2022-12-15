@@ -1,6 +1,6 @@
 package tasks.data_structures;
 
-public class Queue<E> {
+public class Queue<E> implements DataStructure<E>{
     protected DoubleLinkedList<E> list;
 
     public Queue() {
@@ -30,4 +30,15 @@ public class Queue<E> {
     public int size() {
         return list.size();
     }
- }
+
+    @Override
+    public boolean add(E element) {
+        push(element);
+        return true;
+    }
+
+    @Override
+    public E remove() {
+        return pop();
+    }
+}

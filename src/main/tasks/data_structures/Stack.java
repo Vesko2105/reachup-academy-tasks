@@ -1,29 +1,39 @@
 package tasks.data_structures;
 
-public class Stack<E> {
+public class Stack<E> implements DataStructure<E>{
     DoubleLinkedList<E> list;
 
     public Stack() {
         this.list = new DoubleLinkedList<>();
     }
 
-    E pop() {
+    public E pop() {
         return list.removeLast();
     }
 
-    void push(E element) {
+    public void push(E element) {
         list.addLast(element);
     }
 
-    E peek() {
+    public E peek() {
         return list.get(list.size() - 1);
     }
 
-    boolean isEmpty() {
+    public boolean isEmpty() {
         return list.isEmpty();
     }
-    int size() {
+    public int size() {
         return list.size();
     }
 
+    @Override
+    public boolean add(E element) {
+        push(element);
+        return true;
+    }
+
+    @Override
+    public E remove() {
+        return pop();
+    }
 }
