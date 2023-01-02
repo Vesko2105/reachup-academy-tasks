@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
+// TODO: 2.1.2023 г. Fix whole Fraction class
+// TODO: 2.1.2023 г. Write tests
 public class Fraction extends Number implements Comparable<Fraction> {
     public final BigInteger numerator;
     public final BigInteger denominator;
@@ -83,7 +85,7 @@ public class Fraction extends Number implements Comparable<Fraction> {
 
     @Override
     public String toString() {
-        return String.format("%d|%d", numerator, denominator);
+        return String.format("%d/%d", numerator, denominator);
     }
 
     @Override

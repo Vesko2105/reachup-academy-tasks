@@ -1,6 +1,7 @@
 package tasks.oop.fraction;
 
 import java.math.BigInteger;
+import java.util.StringJoiner;
 
 public class FractionTest {
     public static void main(String[] args) {
@@ -14,6 +15,20 @@ public class FractionTest {
         } catch (InvalidDenominatorException e) {
             throw new RuntimeException(e);
         }
-
+        Fraction[] fractions = new Fraction[]{};
+        StringJoiner stringJoiner = new StringJoiner(" ");
+        for (Fraction fraction : fractions) {
+            stringJoiner.add(fraction.toString());
+        }
+        System.out.println(stringJoiner);
+        try {
+            Fraction product = new Fraction(1, 1);
+            for (Fraction fraction : fractions) {
+                product = product.multiply(fraction);
+            }
+            System.out.println(product);
+        } catch (InvalidDenominatorException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

@@ -1,6 +1,5 @@
 package tasks.data_structures;
 
-
 import java.util.Objects;
 
 class Node<T> {

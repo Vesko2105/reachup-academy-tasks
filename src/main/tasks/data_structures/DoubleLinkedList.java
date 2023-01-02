@@ -247,14 +247,18 @@ public class DoubleLinkedList<E> implements Iterable<E> {
     }
 
     public E removeFirst() {
-        if (size > 0) {
-            Node<E> nodeToRemove = firstNodePointer;
+        Node<E> nodeToRemove = firstNodePointer;
+        if (size == 1) {
+            firstNodePointer = null;
+            lastNodePointer = null;
+            size = 0;
+        } else if (size > 0) {
             firstNodePointer = firstNodePointer.next;
             size--;
-            return nodeToRemove.element;
         } else {
             throw new NoSuchElementException();
         }
+        return nodeToRemove.element;
     }
 
     public E removeLast() {

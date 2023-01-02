@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -36,8 +37,25 @@ public class PriorityQueueTest {
         assertEquals(expected.size(), queue.size());
         expected.sort(Integer::compareTo);
         Integer actualInteger = queue.top();
-        assertSame(expected.get(expected.size() - 1), actualInteger);
-        expected.sort((i1, i2) -> i1.compareTo(i2) * -1);
+        assertSame(expected.get(0), actualInteger);
+        for (Integer expectedInteger : expected) {
+            actualInteger = queue.pop();
+            assertSame(expectedInteger, actualInteger);
+        }
+        assertTrue(queue.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Smoke test 2")
+    void smokeTest2() {
+        queue = new PriorityQueue<>(Integer::compareTo, Order.DESCENDING);
+        for (Integer number : expected) {
+            queue.push(number);
+        }
+        assertEquals(expected.size(), queue.size());
+        expected.sort(Comparator.reverseOrder());
+        Integer actualInteger = queue.top();
+        assertSame(expected.get(0), actualInteger);
         for (Integer expectedInteger : expected) {
             actualInteger = queue.pop();
             assertSame(expectedInteger, actualInteger);
