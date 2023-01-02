@@ -32,4 +32,10 @@ public class Utils {
         }
         return matrixClone;
     }
+
+    public static <T> void deepCopyOf(T[][] matrix, T[][] inputMatrix) {
+        for (int i = 0; i < inputMatrix.length; i++) {
+            inputMatrix[i] = Arrays.copyOf(matrix[i], matrix[i].length);
+        }
+    }
 }
