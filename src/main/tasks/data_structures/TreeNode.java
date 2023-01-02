@@ -45,13 +45,4 @@ class TreeNode<T extends Comparable<T>> implements Comparable<TreeNode<T>> {
     public boolean isLeaf() {
         return left == null && right == null;
     }
-
-    // TODO: 30.12.2022 г. Remove methods if not needed
-//    public boolean hasOnlyLeftChild() {
-//        return left != null && right == null;
-//    }
-//
-//    public boolean hasOnlyRightChild() {
-//        return right != null && left == null;
-//    }
 }
