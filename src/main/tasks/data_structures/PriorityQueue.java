@@ -18,7 +18,7 @@ public class PriorityQueue<E> extends Queue<E> {
     private int findIndex(E element) {
         Iterator<E> iterator = super.list.iterator();
         int index = 0;
-        while (iterator.hasNext() && comparator.compare(element, iterator.next()) < 0) {
+        while (iterator.hasNext() && comparator.compare(element, iterator.next()) <= 0) {
             index++;
         }
         return index;
