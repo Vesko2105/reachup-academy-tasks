@@ -1,12 +1,14 @@
 package tasks.puzzle.labyrinth.tiles;
 
+import tasks.ColorType;
+import tasks.Colors;
 import tasks.puzzle.Direction;
 
 public class Wall extends Tile{
     @Override
     public String toString() {
         if(super.toString().isEmpty()) {
-            return "W";
+            return Colors.BACKGROUND_WHITE + " " + Colors.RESET;
         } else {
             return super.toString();
         }

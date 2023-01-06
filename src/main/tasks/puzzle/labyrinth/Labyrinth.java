@@ -1,24 +1,24 @@
 package tasks.puzzle.labyrinth;
 
 import tasks.Pair;
+import tasks.csv_reader.CSVReader;
 import tasks.data_structures.PriorityQueue;
 import tasks.puzzle.labyrinth.tiles.Tile;
 
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 public class Labyrinth {
     LabyrinthNode startingNode;
     int nodesChecked;
     int maxNodes;
 
-    int skippedNodes;
-
-    public Labyrinth(Tile[][] map, Pair<Integer> playerCoordinates, Pair<Integer> goalCoordinates) {
+    public Labyrinth(String mapFilePath, Pair<Integer> playerCoordinates, Pair<Integer> goalCoordinates) throws FileNotFoundException {
+        Tile[][] map = parseMap(mapFilePath);
         map[playerCoordinates.getValue1()][playerCoordinates.getValue2()].setAsStartingPosition();
         map[playerCoordinates.getValue1()][playerCoordinates.getValue2()].setCurrentlyOccupied(true);
         map[goalCoordinates.getValue1()][goalCoordinates.getValue2()].setGoal(true);
@@ -32,49 +32,55 @@ public class Labyrinth {
         );
     }
 
-    public void findPath() {
+    private Tile[][] parseMap(String filePath) throws FileNotFoundException {
+        Tile[][] tiles;
+        try (CSVReader csvReader = new CSVReader(filePath, ",")){
+            List<List<String>> tileStrings = csvReader.read(0, csvReader.gerRecordsCount());
+            boolean hasMissingTiles = tileStrings.stream().map(List::size).distinct().count() != 1;
+            if (hasMissingTiles) {
+                throw new IncompleteMapException();
+            }
+            tiles = new Tile[tileStrings.size()][tileStrings.get(0).size()];
+            int rowIndex = 0;
+            int columnIndex = 0;
+            for (List<String> row : tileStrings) {
+                for (String tileString : row) {
+                    tiles[rowIndex][columnIndex++] = Tile.getNew(tileString);
+                }
+                columnIndex = 0;
+                rowIndex++;
+            }
+
+        } catch (FileNotFoundException e) {
+            throw new FileNotFoundException();
+        }
+        return tiles;
+    }
+
+    public String findPath() {
         PriorityQueue<LabyrinthNode> front = new PriorityQueue<>(Comparator.comparingDouble(LabyrinthNode::evaluateState));
-        PriorityQueue<Double> front2 = new PriorityQueue<>(Double::compareTo);
         LabyrinthNode currentNode = startingNode;
         front.add(currentNode);
-        front2.add(currentNode.evaluateState());
-
-        // TODO: 4.1.2023 г. Learn about logging, file handlers, levels etc.
-        Logger consoleLogger = Logger.getLogger("consoleLogger");
-        Logger fileLogger = Logger.getLogger("fileLogger");
-        FileHandler fileHandler;
-        try {
-            fileHandler = new FileHandler("./src/main/resources/labyrinth.log");
-            fileLogger.addHandler(fileHandler);
-            fileLogger.setUseParentHandlers(false);
-            SimpleFormatter formatter = new SimpleFormatter();
-            fileHandler.setFormatter(formatter);
-            fileLogger.info(System::lineSeparator);
-
-        } catch (SecurityException | IOException e) {
-            e.printStackTrace();
-        }
 
         for (int i = 0; i < 1_000_000 && !front.isEmpty(); i++) {
             currentNode = front.pop();
             if (currentNode.isGoal()) {
                 break;
             }
-            String msg = String.format("%n%s", currentNode);
-            fileLogger.info(msg);
             nodesChecked++;
             List<LabyrinthNode> children = currentNode.getChildren();
             children.forEach(front::add);
-            children.forEach(c -> front2.add(c.evaluateState()));
             maxNodes = Math.max(front.size(), maxNodes);
         }
-        if (currentNode.isGoal()) {
-            consoleLogger.info(() -> String.format("Found solution by traversing %d tiles and skipping %d.%n", nodesChecked, skippedNodes));
-            LabyrinthNode goalNode = currentNode;
-            consoleLogger.info(() -> String.format("The path has a total cost of %.1f.%n", goalNode.pathCost));
-            consoleLogger.info(() -> String.format("%n%s", goalNode));
+
+        StringBuilder stringBuilder = new StringBuilder();
+        if (currentNode == null || !currentNode.isGoal()) {
+            stringBuilder.append(String.format("Did not find solution after traversing %d nodes%n", nodesChecked));
         } else {
-            consoleLogger.info(() -> String.format("Did not find solution after traversing %d nodes%n", nodesChecked));
+            stringBuilder.append(String.format("Found solution by traversing %d.%n", nodesChecked));
+            stringBuilder.append(String.format("The path has a total cost of %.1f.%n", currentNode.pathCost));
+            stringBuilder.append(String.format("%n%s", currentNode.pathFromStart()));
         }
+        return stringBuilder.toString();
     }
 }

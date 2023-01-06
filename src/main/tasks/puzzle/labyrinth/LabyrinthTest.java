@@ -1,22 +1,31 @@
 package tasks.puzzle.labyrinth;
 
+import tasks.Colors;
 import tasks.Pair;
-import tasks.puzzle.labyrinth.tiles.*;
+
+import java.io.FileNotFoundException;
+import java.util.logging.*;
 
 public class LabyrinthTest {
     public static void main(String[] args) {
-        Tile[][] map = {
-                {new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty()},
-                {new Empty(), new Empty(), new Water(), new Empty(), new Empty(), new Empty(), new Empty(), new Wall(), new Wall(), new Wall(), new Empty(), new Empty(), new Empty()},
-                {new Empty(), new Water(), new Wall(), new Wall(), new Empty(), new Empty(), new Wall(), new Wall(), new Empty(), new Wall(), new Empty(), new Empty(), new Empty()},
-                {new Empty(), new Water(), new Empty(), new Wall(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Wall(), new Wall(), new Wall(), new Empty()},
-                {new Empty(), new Water(), new Empty(), new Wall(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Wall(), new Empty(), new Empty(), new Empty()},
-                {new Empty(), new Empty(), new Empty(), new Wall(), new Wall(), new Wall(), new Wall(), new Wall(), new Wall(), new Wall(), new Empty(), new Empty(), new Empty()},
-                {new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty()},
-                {new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty(), new Empty()}
+        Logger consoleLogger = Logger.getLogger("consoleLogger");
+        Formatter formatter = new Formatter() {
+            @Override
+            public String format(LogRecord logRecord) {
+                return logRecord.getMessage();
+            }
         };
-        Labyrinth labyrinth = new Labyrinth(map, new Pair<>(5, 0), new Pair<>(2, map[0].length - 3));
-        labyrinth.findPath();
+        StreamHandler streamHandler = new StreamHandler(System.out, formatter);
+        consoleLogger.setUseParentHandlers(false);
+        consoleLogger.addHandler(streamHandler);
+
+        try {
+            Labyrinth labyrinth = new Labyrinth("./src/main/resources/labyrinth_map.csv", new Pair<>(6, 1), new Pair<>(5, 6));
+            consoleLogger.info(labyrinth.findPath());
+
+        } catch (FileNotFoundException e) {
+            consoleLogger.info(e.getMessage());
+        }
     }
 
 }

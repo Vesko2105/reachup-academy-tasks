@@ -1,12 +1,23 @@
 package tasks.puzzle.labyrinth.tiles;
 
+import tasks.Colors;
 import tasks.puzzle.Direction;
+import tasks.puzzle.labyrinth.InvalidMapTileException;
 
 public abstract class Tile {
     private boolean hasBeenTraversed;
     private boolean isCurrentlyOccupied;
     private boolean isStartingPosition;
     private boolean isGoal;
+
+    public static Tile getNew(String tileString) {
+        return switch (tileString) {
+            case " " -> new Empty();
+            case "W" -> new Wall();
+            case "~" -> new Water();
+            default -> throw new InvalidMapTileException(tileString);
+        };
+    }
 
     public final boolean isOfType(Class<? extends Tile> classType) {
         return this.getClass().equals(classType);
@@ -49,13 +60,11 @@ public abstract class Tile {
     @Override
     public String toString() {
         if (isGoal) {
-            return "X";
+            return Colors.BRIGHT_RED + "X" + Colors.RESET;
         } else if (isCurrentlyOccupied) {
-            return "M";
-        } else if (isStartingPosition) {
-            return "S";
+            return Colors.BRIGHT_GREEN + "M" + Colors.RESET;
         } else if (hasBeenTraversed) {
-            return "*";
+            return Colors.getByCode(94) + "*" + Colors.RESET;
         } else {
             return "";
         }

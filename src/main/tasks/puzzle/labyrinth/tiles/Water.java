@@ -1,5 +1,6 @@
 package tasks.puzzle.labyrinth.tiles;
 
+import tasks.Colors;
 import tasks.puzzle.Direction;
 
 public class Water extends Tile{
@@ -7,7 +8,7 @@ public class Water extends Tile{
     @Override
     public String toString() {
         if(super.toString().isEmpty()) {
-            return "~";
+            return Colors.BRIGHT_BLUE +  "~" + Colors.RESET;
         } else {
             return super.toString();
         }
