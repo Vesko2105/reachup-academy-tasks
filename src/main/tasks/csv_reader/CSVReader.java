@@ -7,7 +7,7 @@ import tasks.csv_reader.exceptions.ReaderReadingException;
 import java.io.*;
 import java.util.*;
 
-public class CSVReader implements Iterable<List<String>> {
+public class CSVReader implements Iterable<List<String>>, AutoCloseable{
     private final BufferedReader reader;
     private final String delimiter;
 
