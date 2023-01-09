@@ -93,10 +93,12 @@ public class CSVReader implements Iterable<List<String>>, AutoCloseable{
             lines.forEach(line -> records.add(new LinkedList<>(Arrays.asList(line.split(delimiter)))));
 
             this.headerRow = records.get(0);
-            this.headerRow.remove(0);
+            if (headerRow.get(0).isEmpty()) {
+                headerRow.remove(0);
+            }
 
             this.headerColumn = records.stream().map(list -> list.get(0)).collect(LinkedList::new, LinkedList::add, LinkedList::addAll);
-            this.headerColumn.remove(0);
+            headerColumn.remove(0);
 
             records.remove(0);
             records.forEach(list -> list.remove(0));
@@ -123,7 +125,7 @@ public class CSVReader implements Iterable<List<String>>, AutoCloseable{
         return getHeaderRow().size();
     }
 
-    public int gerRecordsCount() {
+    public int getRecordsCount() {
         return getHeaderColumn().size();
     }
 
