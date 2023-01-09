@@ -1,6 +1,6 @@
 package tasks.puzzle.labyrinth.tiles;
 
-import tasks.Colors;
+import tasks.colors.Colors;
 import tasks.puzzle.Direction;
 import tasks.puzzle.labyrinth.InvalidMapTileException;
 

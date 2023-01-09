@@ -1,7 +1,6 @@
 package tasks.puzzle.labyrinth.tiles;
 
-import tasks.ColorType;
-import tasks.Colors;
+import tasks.colors.Colors;
 import tasks.puzzle.Direction;
 
 public class Wall extends Tile{

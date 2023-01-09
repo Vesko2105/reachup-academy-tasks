@@ -1,6 +1,5 @@
 package tasks.puzzle.labyrinth;
 
-import tasks.Colors;
 import tasks.Pair;
 
 import java.io.FileNotFoundException;

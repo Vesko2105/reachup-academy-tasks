@@ -8,9 +8,6 @@ import tasks.puzzle.labyrinth.tiles.Tile;
 import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Formatter;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 public class Labyrinth {
     LabyrinthNode startingNode;
@@ -35,7 +32,7 @@ public class Labyrinth {
     private Tile[][] parseMap(String filePath) throws FileNotFoundException {
         Tile[][] tiles;
         try (CSVReader csvReader = new CSVReader(filePath, ",")){
-            List<List<String>> tileStrings = csvReader.read(0, csvReader.gerRecordsCount());
+            List<List<String>> tileStrings = csvReader.read(0, csvReader.getRecordsCount());
             boolean hasMissingTiles = tileStrings.stream().map(List::size).distinct().count() != 1;
             if (hasMissingTiles) {
                 throw new IncompleteMapException();
