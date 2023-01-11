@@ -14,6 +14,9 @@ public class RouteFinder {
     CityDataProvider cityDataProvider;
 
     MapNode startingNode;
+    MapNode destinationNode;
+
+    private int nodesChecked;
 
     public RouteFinder(String citiesFilePath, String startingCity, String destinationCity) {
         this.cityDataProvider = new CityDataProvider(citiesFilePath);
@@ -21,16 +24,17 @@ public class RouteFinder {
     }
 
     public void findPath() {
-        PriorityQueue<MapNode> front = new PriorityQueue<>(Comparator.comparingInt(MapNode::evaluate));
-        front.add(startingNode);
-        MapNode currentNode;
-        for (int i = 0; i < 100_000 && !front.isEmpty(); i++) {
-            currentNode = front.pop();
-            if (currentNode.isGoal()) {
-                printPath(currentNode);
+        PriorityQueue<MapNode> frontForward = new PriorityQueue<>(Comparator.comparingInt(MapNode::evaluate));
+        frontForward.add(startingNode);
+        MapNode currentForwardNode;
+        for (int i = 0; i < 100_000 && !frontForward.isEmpty(); i++) {
+            currentForwardNode = frontForward.pop();
+            nodesChecked++;
+            if (currentForwardNode.isGoal()) {
+                printPath(currentForwardNode);
                 return;
             }
-            currentNode.getChildren(cityDataProvider).forEach(front::add);
+            currentForwardNode.getChildren(cityDataProvider).forEach(frontForward::add);
         }
     }
 
@@ -47,9 +51,13 @@ public class RouteFinder {
         consoleHandler.setFormatter(formatter);
         logger.addHandler(consoleHandler);
 
-        StringJoiner stringJoiner = new StringJoiner(" -> ");
-        goalNode.getVisited().forEach(node -> stringJoiner.add(node.toString()));
-        logger.info(stringJoiner::toString);
+        if (goalNode.isGoal()) {
+            logger.info(() -> String.format("Found a route! Took %d steps.%n", nodesChecked));
+            StringJoiner stringJoiner = new StringJoiner(" -> ");
+            goalNode.getVisited().forEach(node -> stringJoiner.add(node.toString()));
+            logger.info(() -> String.format("%s%n", stringJoiner));
+            return;
+        }
         logger.info("Could not find a route!");
     }
 }
