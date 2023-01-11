@@ -18,40 +18,13 @@ public class Fraction extends Number implements Comparable<Fraction> {
             numerator = numerator.negate();
             denominator = denominator.negate();
         }
-
-        int sign = numerator.compareTo(BigInteger.ZERO);
-
-        if (numerator.compareTo(denominator) == 0) {
-            this.numerator = BigInteger.ONE;
-            this.denominator = BigInteger.ONE;
-        } else {
-            BigInteger divisor = BigInteger.TWO;
-            BigInteger limit1 = numerator.abs().sqrt();
-            BigInteger limit2 = denominator.sqrt();
-            numerator = numerator.abs();
-            denominator = denominator.abs();
-            while (divisor.compareTo(limit1) <= 0 &&
-                    divisor.compareTo(limit2) <= 0 &&
-                    numerator.compareTo(BigInteger.ONE) != 0 &&
-                    denominator.compareTo(BigInteger.ONE) != 0) {
-                if (numerator.remainder(divisor).compareTo(BigInteger.ZERO) == 0 &&
-                        denominator.remainder(divisor).compareTo(BigInteger.ZERO) == 0) {
-                    numerator = numerator.divide(divisor);
-                    denominator = denominator.divide(divisor);
-                }
-                divisor = divisor.add(BigInteger.ONE);
-            }
-            divisor = numerator.compareTo(denominator) < 0 ? numerator : denominator;
-            if (numerator.compareTo(BigInteger.ZERO) == 0) {
-                denominator = BigInteger.ONE;
-            } else if (numerator.remainder(divisor).compareTo(BigInteger.ZERO) == 0 &&
-                    denominator.remainder(divisor).compareTo(BigInteger.ZERO) == 0) {
-                numerator = numerator.divide(divisor);
-                denominator = denominator.divide(divisor);
-            }
-            this.numerator = numerator;
-            this.denominator = denominator;
+        if (numerator.compareTo(BigInteger.ZERO) != 0) {
+            BigInteger gcd = numerator.gcd(denominator);
+            numerator = numerator.divide(gcd);
+            denominator = denominator.divide(gcd);
         }
+        this.numerator = numerator;
+        this.denominator = denominator;
     }
 
     public Fraction(int numerator, int denominator) throws InvalidDenominatorException {
@@ -108,7 +81,7 @@ public class Fraction extends Number implements Comparable<Fraction> {
     }
 
     public Fraction add(Fraction other) throws InvalidDenominatorException {
-        return new Fraction(this.numerator.add(other.numerator), this.denominator);
+        return new Fraction(this.numerator.multiply(other.denominator).add(this.denominator.multiply(other.numerator)), this.denominator.multiply(other.denominator));
     }
 
     public Fraction subtract(Fraction other) throws InvalidDenominatorException {

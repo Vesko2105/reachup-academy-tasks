@@ -5,14 +5,15 @@ import java.time.Period;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Person {
-    LocalDate birthDate;
     String id;
+    LocalDate birthDate;
     String firstName;
     String lastName;
 
-    public Person(LocalDate birthDate, String id, String firstName, String lastName) {
+    public Person(String id, LocalDate birthDate, String firstName, String lastName) {
         this.birthDate = birthDate;
         this.id = id;
         this.firstName = firstName;
@@ -37,6 +38,10 @@ public class Person {
 
     public int getAge() {
         return Period.between(birthDate, LocalDate.now()).getYears();
+    }
+
+    public int getAge(LocalDate now) {
+        return Period.between(birthDate, now).getYears();
     }
 
     public String getFirstName() {
@@ -74,30 +79,34 @@ public class Person {
 
     @Override
     public String toString() {
-        return String.format("%s# %s %s | %d years old", id, firstName, lastName, getAge());
-    }
-
-    public static List<Person> sortPeopleByAge(List<Person> people) {
-        return people
-                .stream()
-                .sorted(Comparator.comparingInt(Person::getAge))
-                .toList();
+        return String.format("(%s,%s,%s,%d)", id, firstName, lastName, getAge());
     }
 
     public static Comparator<Person> byAgeOldestFirst() {
         return (Person person1, Person person2) -> Integer.compare(person2.getAge(), person1.getAge());
     }
 
+    public static Comparator<Person> byAgeOldestFirst(LocalDate now) {
+        return (Person person1, Person person2) -> Integer.compare(person2.getAge(now), person1.getAge(now));
+    }
+
     public static Comparator<Person> byLastNameAlphabetically() {
         return Comparator.comparing(Person::getLastName);
     }
 
-    public static List<Person> filterAdult(List<Person> people) {
+    public static List<Person> sortByAge(List<Person> people) {
         return people
                 .stream()
-                .filter(person -> person.getAge() >= 18)
-                .sorted(Person.byAgeOldestFirst())
+                .sorted(Comparator.comparingInt(Person::getAge))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Person> filterAdult(List<Person> people, LocalDate now) {
+        return people
+                .stream()
+                .filter(person -> person.getAge(now) >= 18)
                 .sorted(Person.byLastNameAlphabetically())
-                .toList();
+                .sorted(Person.byAgeOldestFirst(now))
+                .collect(Collectors.toList());
     }
 }

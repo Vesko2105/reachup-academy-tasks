@@ -18,7 +18,7 @@ public class Employee extends Person {
     Level level;
 
     public Employee(LocalDate birthDate, String id, String firstName, String lastName, LocalDate entryDate, Department department, Level level) {
-        super(birthDate, id, firstName, lastName);
+        super(id, birthDate, firstName, lastName);
         this.entryDate = entryDate;
         this.level = level;
         this.department = department;
