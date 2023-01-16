@@ -1,6 +1,7 @@
 package tasks.map;
 
 
+import tasks.Utils;
 import tasks.data_structures.PriorityQueue;
 
 import java.util.Comparator;
@@ -39,18 +40,7 @@ public class RouteFinder {
     }
 
     private void printPath(MapNode goalNode) {
-        Logger logger = Logger.getLogger("logger");
-        logger.setUseParentHandlers(false);
-        ConsoleHandler consoleHandler = new ConsoleHandler();
-        Formatter formatter = new Formatter() {
-            @Override
-            public String format(LogRecord logRecord) {
-                return logRecord.getMessage();
-            }
-        };
-        consoleHandler.setFormatter(formatter);
-        logger.addHandler(consoleHandler);
-
+        Logger logger = Utils.getConsoleLogger();
         if (goalNode.isGoal()) {
             logger.info(() -> String.format("Found a route! Took %d steps.%n", nodesChecked));
             StringJoiner stringJoiner = new StringJoiner(" -> ");
