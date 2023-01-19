@@ -20,9 +20,9 @@ class TreeNode<T extends Comparable<T>> implements Comparable<TreeNode<T>> {
         } else if (!(other instanceof TreeNode<?> otherNode)) {
             return false;
         } else if (this.element != null) {
-            return this.element.equals(otherNode.element);
+            return this.element.equals(otherNode.getElement());
         } else {
-            return otherNode.element == null;
+            return otherNode.getElement() == null;
         }
     }
 

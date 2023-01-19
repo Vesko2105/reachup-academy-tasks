@@ -24,8 +24,8 @@ public class DoubleLinkedList<E> implements Iterable<E> {
         public E next() {
             if (hasNext()) {
                 Node<E> nodeToReturn = nextNode;
-                nextNode = nextNode.next;
-                return nodeToReturn.element;
+                nextNode = nextNode.getNext();
+                return nodeToReturn.getElement();
             } else {
                 throw new NoSuchElementException();
             }
@@ -48,7 +48,7 @@ public class DoubleLinkedList<E> implements Iterable<E> {
         public Node<E> next() {
             if (hasNext()) {
                 Node<E> nodeToReturn = nextNode;
-                nextNode = nextNode.next;
+                nextNode = nextNode.getNext();
                 return nodeToReturn;
             } else {
                 throw new NoSuchElementException();
@@ -58,7 +58,7 @@ public class DoubleLinkedList<E> implements Iterable<E> {
         public Node<E> previous() {
             if (hasNext()) {
                 Node<E> nodeToReturn = nextNode;
-                nextNode = nextNode.previous;
+                nextNode = nextNode.getPrevious();
                 return nodeToReturn;
             } else {
                 throw new NoSuchElementException();
@@ -67,15 +67,15 @@ public class DoubleLinkedList<E> implements Iterable<E> {
     } 
     
 
-    private Node<E> firstNodePointer; 
+    private Node<E> front;
 
-    private Node<E> lastNodePointer; 
+    private Node<E> back;
 
     private int size;
 
     public DoubleLinkedList() {
-        firstNodePointer = null;
-        lastNodePointer = null;
+        front = null;
+        back = null;
         size = 0;
     } 
 
@@ -95,7 +95,7 @@ public class DoubleLinkedList<E> implements Iterable<E> {
         Iterator<Node<E>> iterator = nodeIterator(index);
         int currentIndex = index;
         while (iterator.hasNext() && currentIndex < index + size) {
-            subList.add(iterator.next().element);
+            subList.add(iterator.next().getElement());
             currentIndex++;
         }
         return subList;
@@ -103,7 +103,7 @@ public class DoubleLinkedList<E> implements Iterable<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new DoubleLinkedListIterator(firstNodePointer);
+        return new DoubleLinkedListIterator(front);
     } 
 
     public Iterator<E> iterator(int index) {
@@ -111,7 +111,7 @@ public class DoubleLinkedList<E> implements Iterable<E> {
     } 
 
     private NodeIterator nodeIterator() {
-        return new NodeIterator(firstNodePointer);
+        return new NodeIterator(front);
     } 
     private NodeIterator nodeIterator(int index) {
         return new NodeIterator(getNode(index));
@@ -123,9 +123,9 @@ public class DoubleLinkedList<E> implements Iterable<E> {
         } else if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         } else if (index == 0) {
-            return firstNodePointer;
+            return front;
         } else if (index == size - 1) {
-            return lastNodePointer;
+            return back;
         } else {
             Iterator<Node<E>> iterator = nodeIterator();
             Node<E> nodeToReturn = null;
@@ -141,9 +141,9 @@ public class DoubleLinkedList<E> implements Iterable<E> {
     private int findFirstNode(Node<E> searched) {
         if (size < 1) {
             throw new NoSuchElementException();
-        } else if (searched != null && searched.equals(firstNodePointer)) {
+        } else if (searched != null && searched.equals(front)) {
             return 0;
-        } else if (searched != null && searched.equals(lastNodePointer)){
+        } else if (searched != null && searched.equals(back)){
             return size - 1;
         } else {
             NodeIterator iterator = nodeIterator();
@@ -161,9 +161,9 @@ public class DoubleLinkedList<E> implements Iterable<E> {
     private int findLastNode(Node<E> searched) {
         if (size < 1) {
             throw new NoSuchElementException();
-        } else if (searched != null && searched.equals(firstNodePointer)) {
+        } else if (searched != null && searched.equals(front)) {
             return 0;
-        } else if (searched != null && searched.equals(lastNodePointer)){
+        } else if (searched != null && searched.equals(back)){
             return size - 1;
         } else {
             NodeIterator iterator = nodeIterator();
@@ -185,16 +185,16 @@ public class DoubleLinkedList<E> implements Iterable<E> {
     public void addFirst(E element) {
         Node<E> newNode = new Node<>(element);
         if (size == 0) {
-            firstNodePointer = newNode;
-            lastNodePointer = newNode;
+            front = newNode;
+            back = newNode;
         } else if (size == 1) {
-            newNode.next = lastNodePointer;
-            lastNodePointer.previous = newNode;
-            firstNodePointer = newNode;
+            newNode.setNext(back);
+            back.setPrevious(newNode);
+            front = newNode;
         } else {
-            newNode.next = firstNodePointer;
-            firstNodePointer.previous = newNode;
-            firstNodePointer = newNode;
+            newNode.setNext(front);
+            front.setPrevious(newNode);
+            front = newNode;
         }
         size++;
     }
@@ -202,16 +202,16 @@ public class DoubleLinkedList<E> implements Iterable<E> {
     public int addLast(E element) {
         Node<E> newNode = new Node<>(element);
         if (size == 0) {
-            firstNodePointer = newNode;
-            lastNodePointer = newNode;
+            front = newNode;
+            back = newNode;
         } else if (size == 1) {
-            newNode.previous = firstNodePointer;
-            firstNodePointer.next = newNode;
-            lastNodePointer = newNode;
+            newNode.setPrevious(front);
+            front.setNext(newNode);
+            back = newNode;
         } else {
-            newNode.previous = lastNodePointer;
-            lastNodePointer.next = newNode;
-            lastNodePointer = newNode;
+            newNode.setPrevious(back);
+            back.setNext(newNode);
+            back = newNode;
         }
         return size++;
     }
@@ -226,10 +226,10 @@ public class DoubleLinkedList<E> implements Iterable<E> {
 
             if (currentNodeAtIndex != null) {
                 Node<E> newNode = new Node<>(element);
-                newNode.next = currentNodeAtIndex;
-                newNode.previous = currentNodeAtIndex.previous;
-                currentNodeAtIndex.previous.next = newNode;
-                currentNodeAtIndex.previous = newNode;
+                newNode.setNext(currentNodeAtIndex);
+                newNode.setPrevious(currentNodeAtIndex.getPrevious());
+                currentNodeAtIndex.getPrevious().setNext(newNode);
+                currentNodeAtIndex.setPrevious(newNode);
                 size++;
             }
         }
@@ -247,29 +247,29 @@ public class DoubleLinkedList<E> implements Iterable<E> {
     }
 
     public E removeFirst() {
-        Node<E> nodeToRemove = firstNodePointer;
+        Node<E> nodeToRemove = front;
         if (size == 1) {
-            firstNodePointer = null;
-            lastNodePointer = null;
+            front = null;
+            back = null;
             size = 0;
         } else if (size > 0) {
-            firstNodePointer = firstNodePointer.next;
+            front = front.getNext();
             size--;
         } else {
             throw new NoSuchElementException();
         }
-        return nodeToRemove.element;
+        return nodeToRemove.getElement();
     }
 
     public E removeLast() {
         if (size < 2) {
             return removeFirst();
         } else {
-            Node<E> nodeToRemove = lastNodePointer;
-            lastNodePointer = lastNodePointer.previous;
-            lastNodePointer.next = null;
+            Node<E> nodeToRemove = back;
+            back = back.getPrevious();
+            back.setNext(null);
             size--;
-            return nodeToRemove.element;
+            return nodeToRemove.getElement();
         }
     }
 
@@ -280,10 +280,10 @@ public class DoubleLinkedList<E> implements Iterable<E> {
         } else if (index == size - 1) {
             return removeLast();
         } else {
-            nodeToRemove.next.previous = nodeToRemove.previous;
-            nodeToRemove.previous.next = nodeToRemove.next;
+            nodeToRemove.getNext().setPrevious(nodeToRemove.getPrevious());
+            nodeToRemove.getPrevious().setNext(nodeToRemove.getNext());
             size--;
-            return nodeToRemove.element;
+            return nodeToRemove.getElement();
         }
     }
 
@@ -303,7 +303,7 @@ public class DoubleLinkedList<E> implements Iterable<E> {
 
     public E get(int index) {
         Node<E> searchedNode = getNode(index);
-        return searchedNode != null ? searchedNode.element : null;
+        return searchedNode != null ? searchedNode.getElement() : null;
     }
 
     public int size() {
@@ -315,8 +315,8 @@ public class DoubleLinkedList<E> implements Iterable<E> {
     }
 
     public void clear() {
-        this.firstNodePointer = null;
-        this.lastNodePointer = null;
+        this.front = null;
+        this.back = null;
         size = 0;
     }
 
