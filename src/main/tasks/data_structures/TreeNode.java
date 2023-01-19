@@ -17,7 +17,7 @@ class TreeNode<T extends Comparable<T>> implements Comparable<TreeNode<T>> {
     public boolean equals(Object other) {
         if (this == other) {
             return true;
-        } else if (!(other instanceof Node<?> otherNode)) {
+        } else if (!(other instanceof TreeNode<?> otherNode)) {
             return false;
         } else if (this.element != null) {
             return this.element.equals(otherNode.element);

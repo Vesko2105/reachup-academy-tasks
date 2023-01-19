@@ -1,9 +1,10 @@
 package tasks.data_structures;
 
-import com.sun.source.tree.Tree;
-
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.StringJoiner;
 
 public class OrderedBinaryTree<E extends Comparable<E>> implements Collection<E>, Iterable<E> {
 
@@ -42,7 +43,7 @@ public class OrderedBinaryTree<E extends Comparable<E>> implements Collection<E>
 
     @Override
     public <T> T[] toArray(T[] array) {
-        T[] toReturn = array.length >= size ? array : (T[]) Array.newInstance(array.getClass().getComponentType(), size);
+        @SuppressWarnings("unchecked") T[] toReturn = array.length >= size ? array : (T[]) Array.newInstance(array.getClass().getComponentType(), size);
         int index = 0;
         try {
             for (E e : this) {
