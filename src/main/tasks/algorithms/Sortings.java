@@ -1,9 +1,13 @@
 package tasks.algorithms;
 
+import tasks.Utils;
+
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.StringJoiner;
+import java.util.logging.Logger;
 
 public class Sortings {
+    private static final Logger logger = Utils.getConsoleLogger();
     private static void swap(int[] array, int index1, int index2) {
         int temp = array[index1];
         array[index1] = array[index2];
@@ -37,8 +41,8 @@ public class Sortings {
         return arrayToSort;
     }
 
-    private static int[] merge(int[] sortedArray1, int[] sortedArray2) {
-        int[] merged = new int[sortedArray1.length + sortedArray2.length];
+    private static Integer[] merge(Integer[] sortedArray1, Integer[] sortedArray2) {
+        Integer[] merged = new Integer[sortedArray1.length + sortedArray2.length];
         int index1 = 0;
         int index2 = 0;
         for (int index = 0; index < merged.length; index++) {
@@ -55,13 +59,12 @@ public class Sortings {
         return merged;
     }
 
-    public static int[] mergeSort(int[] array) {
-        int start = 0;
-        int end = array.length - 1;
-        if (end > start) {
-            int middle = (start + end) / 2;
-            int[] firstHalf = mergeSort(Arrays.copyOfRange(array, start, middle + 1));
-            int[] secondHalf = mergeSort(Arrays.copyOfRange(array, middle + 1, end + 1));
+    public static Integer[] mergeSort(Integer[] array) {
+        logger.info(() -> String.valueOf(array.length));
+        if (array.length > 1) {
+            int middle = (array.length) / 2;
+            Integer[] firstHalf = mergeSort(Arrays.copyOfRange(array, 0, middle));
+            Integer[] secondHalf = mergeSort(Arrays.copyOfRange(array, middle, array.length));
             return merge(firstHalf, secondHalf);
         } else {
             return array;
@@ -103,37 +106,15 @@ public class Sortings {
 
     public static int binarySearch(int[] array, int searched) {
         int midIndex = array.length / 2;
-        System.out.printf("Searching %s with middle index - %d%n", Arrays.toString(array), midIndex);
         if (array[midIndex] == searched) {
-            System.out.printf("Found the number in %s at position %d%n", Arrays.toString(array), midIndex);
             return midIndex;
         } else if (array[midIndex] > searched) {
-            System.out.printf("Searched number is not at the middle index %d%n", midIndex);
-            System.out.printf("Searching in left half [%d; %d] of %s%n", 0, midIndex, Arrays.toString(array));
             return binarySearch(Arrays.copyOfRange(array, 0, midIndex), searched);
         }
-        System.out.printf("Searched number is not at the middle index %d%n", midIndex);
-        System.out.printf("Searching in left right [%d; %d] of %s%n", midIndex, array.length - 1, Arrays.toString(array));
         int positionInRightHalf = binarySearch(Arrays.copyOfRange(array, midIndex, array.length), searched);
         if (positionInRightHalf > -1) {
-            System.out.printf("Found in right half [%d; %d] of %s%n", midIndex, array.length - 1, Arrays.toString(array));
-            System.out.printf("Returning index in actual array - %d%n", positionInRightHalf + midIndex + 1);
             return positionInRightHalf + midIndex + 1;
         }
         return -1;
-    }
-
-    public static void main(String[] args) {
-//        int[] sortedArray = {3, 4, 4, 5, 6, 23, 42, 65, 123, 231, 234, 235, 423, 543, 1234, 5667, 78978};
-        int[] unsortedArray = {3, 5, 1234, 543, 123, 235, 23, 42, 423, 4, 4, 234, 231, 6, 5667, 78978, 65};
-//        int[] sortedArray2 = selectionSort(new int[]{3, 5, 1234, 543, 123, 235, 23, 42});
-//        int[] sortedArray3 = selectionSort(new int[]{423, 4, 4, 234, 231, 6, 5667, 78978, 65});
-//        LinkedList<Integer> linkedList1 = new LinkedList<>(Arrays.stream(sortedArray2).boxed().toList());
-//        LinkedList<Integer> linkedList2 = new LinkedList<>(Arrays.stream(sortedArray3).boxed().toList());
-//        partition(unsortedArray, 0, unsortedArray.length - 1);
-        quickSort(unsortedArray, 0, unsortedArray.length - 1);
-        for (int num : unsortedArray) {
-            System.out.print(num    + " ");
-        }
     }
 }
