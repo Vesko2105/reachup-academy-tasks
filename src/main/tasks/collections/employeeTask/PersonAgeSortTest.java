@@ -2,7 +2,6 @@ package tasks.collections.employeeTask;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.List;
 import java.util.StringJoiner;
 
 public class PersonAgeSortTest {
@@ -12,7 +11,7 @@ public class PersonAgeSortTest {
                         "1",
                         LocalDate.of(2001, 1, 1),
                         "Ivan",
-                        "Aetrov"
+                        "Qiuyasd"
                 ),
                 new Person(
                         "2",
@@ -36,7 +35,7 @@ public class PersonAgeSortTest {
                         "5",
                         LocalDate.of(2001, 1, 2),
                         "Ivan",
-                        "Georgiev"
+                        "Auidya"
                 ),
                 new Person(
                         "6",
@@ -51,11 +50,18 @@ public class PersonAgeSortTest {
                         "Ianfba"
                 )
         };
-        StringJoiner stringJoiner = new StringJoiner(",");
-        Person.sortByAge(Arrays.asList(people)).forEach(person -> stringJoiner.add(person.toString()));
-        System.out.println(stringJoiner);
+        LocalDate now = LocalDate.now();
+        StringJoiner stringJoiner1 = new StringJoiner(",");
+        Person.sortByAge(Arrays.asList(people))
+                .stream()
+                .map(Person::toString)
+                .forEach(stringJoiner1::add);
+        System.out.println(stringJoiner1);
         StringJoiner stringJoiner2 = new StringJoiner(",");
-        Person.filterAdult(Arrays.asList(people), LocalDate.now()).forEach(person -> stringJoiner2.add(person.toString()));
+        Person.filterAdult(Arrays.asList(people), now)
+                .stream()
+                .map(Person::toString)
+                .forEach(stringJoiner2::add);
         System.out.println(stringJoiner2);
     }
 

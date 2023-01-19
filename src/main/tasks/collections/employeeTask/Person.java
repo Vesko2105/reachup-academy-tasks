@@ -5,7 +5,6 @@ import java.time.Period;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class Person {
     String id;
@@ -97,16 +96,16 @@ public class Person {
     public static List<Person> sortByAge(List<Person> people) {
         return people
                 .stream()
-                .sorted(Comparator.comparingInt(Person::getAge))
-                .collect(Collectors.toList());
+                .sorted(byAgeOldestFirst())
+                .toList();
     }
 
     public static List<Person> filterAdult(List<Person> people, LocalDate now) {
         return people
                 .stream()
                 .filter(person -> person.getAge(now) >= 18)
-                .sorted(Person.byLastNameAlphabetically())
-                .sorted(Person.byAgeOldestFirst(now))
-                .collect(Collectors.toList());
+                .sorted(byAgeOldestFirst(now))
+                .sorted(byLastNameAlphabetically())
+                .toList();
     }
 }
