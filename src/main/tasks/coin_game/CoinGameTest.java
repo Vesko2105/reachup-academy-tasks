@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 public class CoinGameTest {
     public static void main(String[] args) {
         CoinGame game = new CoinGame(
-                new boolean[]{true, true, true, true, false, false, false}
+                new boolean[]{false, false, true, false, false, false, false}
         );
         Logger logger = Utils.getConsoleLogger();
         logger.info(game::findOptimalGamePlaythrough);

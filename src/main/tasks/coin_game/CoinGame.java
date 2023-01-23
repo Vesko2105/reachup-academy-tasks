@@ -36,7 +36,12 @@ public class CoinGame {
 
     private Pair<CoinGameNode, Integer> betterMove(Pair<CoinGameNode, Integer> move1, Pair<CoinGameNode, Integer> move2) {
         boolean isBetter;
-
+        if (move1 == null) {
+            return move2;
+        }
+        if (move2 == null) {
+            return move1;
+        }
         if (move1.getValue1().isMaximisingPlayerTurn) {
             isBetter = move1.getValue2() < move2.getValue2();
         } else {
@@ -45,10 +50,6 @@ public class CoinGame {
 
         return isBetter ? move1 : move2;
     }
-
-//    private Pair<GameMove, Integer> minMaxAB(CoinGameNode currentNode, int alpha, int beta) {
-//
-//    }
 
     public String findOptimalMove() {
         StringJoiner solution = new StringJoiner(System.lineSeparator());
