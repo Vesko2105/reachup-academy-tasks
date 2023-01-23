@@ -19,9 +19,9 @@ public class MathematicalExpression {
 //        return list;
 //    }
 
-    static List<Pair<Integer>> getBrackets(String expression) {
+    static List<Pair<Integer, Integer>> getBrackets(String expression) {
         ArrayDeque<Integer> stack = new ArrayDeque<>();
-        List<Pair<Integer>> list = new ArrayList<>();
+        List<Pair<Integer, Integer>> list = new ArrayList<>();
         expression = expression.replaceAll(" ", "");
         for (int index = 0; index < expression.length(); index++) {
             if (expression.charAt(index) == '(') {
