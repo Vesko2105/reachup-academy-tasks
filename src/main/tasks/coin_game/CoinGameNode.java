@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.StringJoiner;
 
 public class CoinGameNode {
-    private final boolean[] state;
+    public final boolean[] state;
     public final boolean isMaximisingPlayerTurn;
 
     private final int totalTakes;
@@ -14,15 +14,19 @@ public class CoinGameNode {
 
     public final CoinGameNode parent;
 
+    public GameMove originMove;
+
     public CoinGameNode(boolean[] state, boolean isMaximisingPlayerTurn) {
         this.state = state;
+        this.originMove = null;
         this.isMaximisingPlayerTurn = isMaximisingPlayerTurn;
         this.totalTakes = 0;
         this.parent = null;
     }
 
-    public CoinGameNode(boolean[] state, boolean isMaximisingPlayerTurn, int totalTakes, CoinGameNode parent) {
+    public CoinGameNode(boolean[] state, GameMove originMove, boolean isMaximisingPlayerTurn, int totalTakes, CoinGameNode parent) {
         this.state = state;
+        this.originMove = originMove;
         this.isMaximisingPlayerTurn = isMaximisingPlayerTurn;
         this.totalTakes = totalTakes;
         this.parent = parent;
@@ -44,7 +48,7 @@ public class CoinGameNode {
             if (!state[i]) {
                 boolean[] child = state.clone();
                 child[i] = true;
-                newChildren.add(new CoinGameNode(child, !isMaximisingPlayerTurn, totalTakes + 1, this));
+                newChildren.add(new CoinGameNode(child, new GameMove(i, 1, isMaximisingPlayerTurn), !isMaximisingPlayerTurn, totalTakes + 1, this));
             }
         }
         return newChildren;
@@ -56,7 +60,7 @@ public class CoinGameNode {
                 boolean[] child = state.clone();
                 child[i] = true;
                 child[(i + 1) % state.length] = true;
-                newChildren.add(new CoinGameNode(child, !isMaximisingPlayerTurn, totalTakes + 1, this));
+                newChildren.add(new CoinGameNode(child, new GameMove(i, 2, isMaximisingPlayerTurn), !isMaximisingPlayerTurn, totalTakes + 1, this));
             }
         }
         return newChildren;
@@ -69,13 +73,13 @@ public class CoinGameNode {
                 child[i] = true;
                 child[(i + 1) % state.length] = true;
                 child[(i + 2) % state.length] = true;
-                newChildren.add(new CoinGameNode(child, !isMaximisingPlayerTurn, totalTakes + 1, this));
+                newChildren.add(new CoinGameNode(child, new GameMove(i, 3, isMaximisingPlayerTurn), !isMaximisingPlayerTurn, totalTakes + 1, this));
             }
         }
         return newChildren;
     }
 
-    public boolean isGoal() {
+    public boolean isFinal() {
         for (boolean b : state) {
             if(!b) {
                 return false;
