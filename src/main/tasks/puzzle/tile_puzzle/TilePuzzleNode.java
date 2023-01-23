@@ -58,7 +58,7 @@ public class TilePuzzleNode {
         return this.children;
     }
 
-    private Pair<Integer> getSymbolCoordinates(char symbol, char[][] state) {
+    private Pair<Integer, Integer> getSymbolCoordinates(char symbol, char[][] state) {
         for (int i = 0; i < state.length; i++) {
             for (int j = 0; j < state[i].length; j++) {
                 if (symbol == state[i][j]) {
@@ -73,8 +73,8 @@ public class TilePuzzleNode {
         int distance = 0;
         for (char[] row : goalState) {
             for (char symbol : row) {
-                Pair<Integer> goalCoordinates = getSymbolCoordinates(symbol, goalState);
-                Pair<Integer> stateCoordinates = getSymbolCoordinates(symbol, state);
+                Pair<Integer, Integer> goalCoordinates = getSymbolCoordinates(symbol, goalState);
+                Pair<Integer, Integer> stateCoordinates = getSymbolCoordinates(symbol, state);
                 distance += Math.abs(goalCoordinates.getValue1() - stateCoordinates.getValue1()) + Math.abs(goalCoordinates.getValue2() - stateCoordinates.getValue2());
             }
         }

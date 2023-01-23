@@ -13,12 +13,12 @@ import java.util.function.Predicate;
 public class LabyrinthNode {
     private Tile[][] map;
     private List<LabyrinthNode> children;
-    private final Pair<Integer> playerCoordinates;
-    private final Pair<Integer> goalCoordinates;
+    private final Pair<Integer, Integer> playerCoordinates;
+    private final Pair<Integer, Integer> goalCoordinates;
     public final LabyrinthNode parent;
     public final double pathCost;
 
-    public LabyrinthNode(Tile[][] map, Pair<Integer> playerCoordinates, Pair<Integer> goalCoordinates, LabyrinthNode parent, double moveCost) {
+    public LabyrinthNode(Tile[][] map, Pair<Integer, Integer> playerCoordinates, Pair<Integer, Integer> goalCoordinates, LabyrinthNode parent, double moveCost) {
         this.map = map;
         this.children = null;
         this.playerCoordinates = playerCoordinates;
@@ -51,8 +51,8 @@ public class LabyrinthNode {
 
     private void tryMoveInDirection(
             Direction direction,
-            Predicate<Pair<Integer>> predicate,
-            Pair<Integer> newPlayerCoordinates
+            Predicate<Pair<Integer, Integer>> predicate,
+            Pair<Integer, Integer> newPlayerCoordinates
     ) {
         if (!predicate.test(newPlayerCoordinates)) {
             return;

@@ -14,7 +14,7 @@ public class Labyrinth {
     int nodesChecked;
     int maxNodes;
 
-    public Labyrinth(String mapFilePath, Pair<Integer> playerCoordinates, Pair<Integer> goalCoordinates) throws FileNotFoundException {
+    public Labyrinth(String mapFilePath, Pair<Integer, Integer> playerCoordinates, Pair<Integer, Integer> goalCoordinates) throws FileNotFoundException {
         Tile[][] map = parseMap(mapFilePath);
         map[playerCoordinates.getValue1()][playerCoordinates.getValue2()].setAsStartingPosition();
         map[playerCoordinates.getValue1()][playerCoordinates.getValue2()].setCurrentlyOccupied(true);
