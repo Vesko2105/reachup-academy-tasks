@@ -5,6 +5,7 @@ import java.time.Period;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Person {
     String id;
@@ -79,6 +80,10 @@ public class Person {
     @Override
     public String toString() {
         return String.format("(%s,%s,%s,%d)", id, firstName, lastName, getAge());
+    }
+
+    public String toString(LocalDate date) {
+        return String.format("(%s,%s,%s,%d)", id, firstName, lastName, getAge(date));
     }
 
     public static Comparator<Person> byAgeOldestFirst() {

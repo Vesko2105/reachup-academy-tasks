@@ -48,9 +48,15 @@ public class PersonAgeSortTest {
                         LocalDate.of(1998, 1, 2),
                         "Jasd",
                         "Ianfba"
+                ),
+                new Person(
+                        "123456",
+                        LocalDate.of(2016, 8, 16),
+                        "John",
+                        "Doe"
                 )
         };
-        LocalDate now = LocalDate.now();
+        LocalDate now = LocalDate.now().minusYears(3);
         StringJoiner stringJoiner1 = new StringJoiner(",");
         Person.sortByAge(Arrays.asList(people))
                 .stream()
@@ -60,7 +66,7 @@ public class PersonAgeSortTest {
         StringJoiner stringJoiner2 = new StringJoiner(",");
         Person.filterAdult(Arrays.asList(people), now)
                 .stream()
-                .map(Person::toString)
+                .map(person -> person.toString(now))
                 .forEach(stringJoiner2::add);
         System.out.println(stringJoiner2);
     }
