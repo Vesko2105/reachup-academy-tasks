@@ -1,12 +1,12 @@
 package tasks.coin_game;
 
-public class GameMove {
+public class Move {
     private int firstCoinIndex;
     private int coinCount;
 
     private boolean isMaximisingPlayerTurn;
 
-    public GameMove(int firstCoinIndex, int coinCount, boolean isMaximisingPlayerTurn) {
+    public Move(int firstCoinIndex, int coinCount, boolean isMaximisingPlayerTurn) {
         this.firstCoinIndex = firstCoinIndex;
         this.coinCount = coinCount;
         this.isMaximisingPlayerTurn = isMaximisingPlayerTurn;

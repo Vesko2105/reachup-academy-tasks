@@ -8,32 +8,32 @@ import java.util.List;
 import java.util.StringJoiner;
 
 public class CoinGame {
-    private CoinGameNode startingNode;
+    private final State startingState;
     private int gameChecks;
 
-    public CoinGame(boolean[] startingState) {
-        startingNode = new CoinGameNode(startingState, true);
+    public CoinGame(boolean[] startingCoins) {
+        startingState = new State(startingCoins, true);
     }
 
-    private Pair<CoinGameNode, Integer> minMaxAB(CoinGameNode currentNode, int alpha, int beta) {
+    private Pair<State, Integer> minMaxAB(State currentState, int alpha, int beta) {
         gameChecks++;
-        if (currentNode.isFinal()) {
-            return new Pair<>(currentNode, currentNode.evaluate());
+        if (currentState.isFinal()) {
+            return new Pair<>(currentState, currentState.evaluate());
         }
-        Pair<CoinGameNode, Integer> bestMove = null;
-        List<CoinGameNode> children = currentNode.getChildren();
+        Pair<State, Integer> bestMove = null;
+        List<State> children = currentState.getChildren();
         children.sort(
-                currentNode.isMaximisingPlayerTurn ?
-                        Comparator.comparingInt(CoinGameNode::evaluate) :
-                        Comparator.comparingInt(CoinGameNode::evaluate).reversed()
+                currentState.isMaximisingPlayerTurn ?
+                        Comparator.comparingInt(State::evaluate).reversed() :
+                        Comparator.comparingInt(State::evaluate)
         );
-        for (CoinGameNode child : children) {
-            Pair<CoinGameNode, Integer> bestChildMove = new Pair<>(
+        for (State child : children) {
+            Pair<State, Integer> bestChildMove = new Pair<>(
                     child,
                     minMaxAB(child, alpha, beta).getValue2()
             );
             bestMove = betterMove(bestMove, bestChildMove);
-            CoinGameNode bestState = bestMove.getValue1();
+            State bestState = bestMove.getValue1();
             if (bestState.isMaximisingPlayerTurn) {
                 alpha = Math.max(alpha, bestState.evaluate());
             } else {
@@ -47,18 +47,18 @@ public class CoinGame {
         return bestMove;
     }
 
-    private Pair<CoinGameNode, Integer> minMax(CoinGameNode currentNode) {
+    private Pair<State, Integer> minMax(State currentState) {
         gameChecks++;
-        if (currentNode.isFinal()) {
-            return new Pair<>(currentNode, currentNode.evaluate());
+        if (currentState.isFinal()) {
+            return new Pair<>(currentState, currentState.evaluate());
         }
-        List<CoinGameNode> children = currentNode.getChildren();
-        CoinGameNode firstChild = children.get(0);
-        Pair<CoinGameNode, Integer> bestMove = new Pair<>(firstChild, minMax(firstChild).getValue2());
+        List<State> children = currentState.getChildren();
+        State firstChild = children.get(0);
+        Pair<State, Integer> bestMove = new Pair<>(firstChild, minMax(firstChild).getValue2());
 
         for (int i = 1; i < children.size(); i++) {
-            CoinGameNode child = children.get(i);
-            Pair<CoinGameNode, Integer> bestChildMove = new Pair<>(
+            State child = children.get(i);
+            Pair<State, Integer> bestChildMove = new Pair<>(
                     child,
                     minMax(child).getValue2()
             );
@@ -68,7 +68,7 @@ public class CoinGame {
         return bestMove;
     }
 
-    private Pair<CoinGameNode, Integer> betterMove(Pair<CoinGameNode, Integer> move1, Pair<CoinGameNode, Integer> move2) {
+    private Pair<State, Integer> betterMove(Pair<State, Integer> move1, Pair<State, Integer> move2) {
         boolean isBetter;
         if (move1 == null) {
             return move2;
@@ -77,9 +77,9 @@ public class CoinGame {
             return move1;
         }
         if (move1.getValue1().isMaximisingPlayerTurn) {
-            isBetter = move1.getValue2() < move2.getValue2();
+            isBetter = move1.getValue2() <= move2.getValue2();
         } else {
-            isBetter = move1.getValue2() > move2.getValue2();
+            isBetter = move1.getValue2() >= move2.getValue2();
         }
 
         return isBetter ? move1 : move2;
@@ -87,26 +87,24 @@ public class CoinGame {
 
     public String findOptimalMove() {
         StringJoiner solution = new StringJoiner(System.lineSeparator());
-        CoinGameNode currentNode = startingNode;
-        solution.add(Arrays.toString(currentNode.state));
-        Pair<CoinGameNode, Integer> bestMove = minMax(startingNode);
+        State currentState = startingState;
+        solution.add(Arrays.toString(currentState.coins));
+        Pair<State, Integer> bestMove = minMax(startingState);
         solution.add(String.format("Optimal move: %s | Score: %d", bestMove.getValue1().originMove.toString(), bestMove.getValue2()));
-        solution.add(Arrays.toString(bestMove.getValue1().state));
+        solution.add(Arrays.toString(bestMove.getValue1().coins));
         return solution.toString();
     }
 
     public String findOptimalGamePlaythrough() {
         StringJoiner solution = new StringJoiner(System.lineSeparator());
-        CoinGameNode currentNode = startingNode;
-        solution.add(Arrays.toString(currentNode.state));
-        Pair<CoinGameNode, Integer> bestMove;
+        State currentState = startingState;
+        solution.add(currentState.toString());
+        Pair<State, Integer> bestMove;
         do {
-            bestMove = minMaxAB(currentNode, -1000, 1000);
-//            bestMove = minMax(currentNode);
-
-            solution.add(String.format("Optimal move: %s | Score: %d", bestMove.getValue1().originMove.toString(), bestMove.getValue2()));
-            solution.add(Arrays.toString(bestMove.getValue1().state));
-            currentNode = bestMove.getValue1();
+            bestMove = minMaxAB(currentState, -1000, 1000);
+            currentState = bestMove.getValue1();
+            solution.add(String.format("Optimal move: %s | Score: %d", currentState.originMove.toString(), bestMove.getValue2()));
+            solution.add(currentState.toString());
         } while (!bestMove.getValue1().isFinal());
         solution.add("Game checks: " + gameChecks);
         return solution.toString();
